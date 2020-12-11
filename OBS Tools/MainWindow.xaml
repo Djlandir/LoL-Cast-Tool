@@ -13,38 +13,12 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="250" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Content="Pfad des Ordners" />
-            <TextBox
-                Name="PathInput"
-                Grid.Row="0"
-                Grid.Column="1"
-                Width="250"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                TextChanged="PathInput_TextChanged"
-                TextWrapping="Wrap" />
-        </Grid>
-
-        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="120" />
@@ -149,12 +123,15 @@
                 TextChanged="RedScore_TextChanged"
                 TextWrapping="Wrap" />
         </Grid>
-        <Grid Grid.Row="0" Grid.Column="2">
+
+        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="120" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -204,6 +181,36 @@
                 VerticalAlignment="Top"
                 TextChanged="RedScoreIG_TextChanged"
                 TextWrapping="Wrap" />
+            <ComboBox
+                Name="TeamsBlue"
+                Grid.Row="3"
+                Grid.Column="0"
+                Width="120"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                IsEditable="True" />
+            <Button
+                Grid.Row="3"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="ChangeImageBlue"
+                Content="Button" />
+            <ComboBox
+                Name="TeamsRed"
+                Grid.Row="4"
+                Grid.Column="0"
+                Width="120"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                IsEditable="True" />
+            <Button
+                Grid.Row="4"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="ChangeImageRed"
+                Content="Button" />
         </Grid>
     </Grid>
 </Window>
