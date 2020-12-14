@@ -9,9 +9,22 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="RiotSharp" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Images\ActiveImageBlueSide\InkedWallpaper_LI.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\AllImages\ezgif.com-webp-to-png.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\AllImages\sopdfgndf.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\AllImages\Untitled.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TextFiles\Blue_Score.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -45,6 +58,10 @@
     <Folder Include="Images\AllImages\" />
     <Folder Include="Images\ActiveImageBlueSide\" />
     <Folder Include="Images\ActiveImageRedSide\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\lcu-sharp-master\LCUSharp\LCUSharp.csproj" />
   </ItemGroup>
 
 </Project>

@@ -21,8 +21,8 @@ namespace OBS_Tools
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string Basepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"TextFiles\");
-        public static string Imagepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"Images\");
+        public string Basepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"TextFiles\");
+        public string Imagepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"Images\");
         public List<Team> Teams;
 
         public MainWindow()
@@ -198,6 +198,12 @@ namespace OBS_Tools
         private void ChangeImageRed(object sender, RoutedEventArgs e)
         {
             SetImage(TeamsBlue.SelectedIndex, 2);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Overlay overlay = new Overlay();
+            overlay.Show();
         }
     }
 }

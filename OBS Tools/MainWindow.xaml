@@ -212,5 +212,6 @@
                 Click="ChangeImageRed"
                 Content="Button" />
         </Grid>
+        <Button Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="25,254,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Window>
