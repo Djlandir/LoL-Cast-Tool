@@ -10,16 +10,104 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <TextBox Name="SummonerName1" HorizontalAlignment="Left" Margin="75,66,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName2" HorizontalAlignment="Left" Margin="200,66,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName3" HorizontalAlignment="Left" Margin="325,66,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName4" HorizontalAlignment="Left" Margin="450,66,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName5" HorizontalAlignment="Left" Margin="575,66,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName6" HorizontalAlignment="Left" Margin="75,146,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName7" HorizontalAlignment="Left" Margin="200,146,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName8" HorizontalAlignment="Left" Margin="325,146,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName9" HorizontalAlignment="Left" Margin="450,146,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="SummonerName10" HorizontalAlignment="Left" Margin="575,146,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button Name="RefreshSummonners" HorizontalAlignment="Left" Margin="75, 226, 0, 0" Content="Refresh" Click="RefreshSummonners_Click" />
+        <TextBox
+            Name="SummonerName1"
+            Width="120"
+            Margin="75,66,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName2"
+            Width="120"
+            Margin="200,66,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName3"
+            Width="120"
+            Margin="325,66,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName4"
+            Width="120"
+            Margin="450,66,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName5"
+            Width="120"
+            Margin="575,66,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName6"
+            Width="120"
+            Margin="75,146,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName7"
+            Width="120"
+            Margin="200,146,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName8"
+            Width="120"
+            Margin="325,146,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName9"
+            Width="120"
+            Margin="450,146,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="SummonerName10"
+            Width="120"
+            Margin="575,146,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="TextBox"
+            TextWrapping="Wrap" />
+        <Label
+            Name="Status"
+            Margin="75,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Label" />
+        <Label
+            Name="Champion"
+            Margin="75,299,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Label" />
+        <Image
+            Name="Icon"
+            Width="100"
+            Height="100"
+            Margin="270,254,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" />
     </Grid>
 </Window>

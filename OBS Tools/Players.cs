@@ -6,15 +6,15 @@ namespace OBS_Tools
 {
     public class Players
     {
-        public string assignedPosition;
-        public int cellId;
-        public int championId;
-        public int championPickIntent;
-        public string entitledFeatureType;
-        public int selectedSkinId;
-        public int spell1Id;
-        public int spell2Id;
-        public int summonerId;
-        public int team;
+        public string assignedPosition { get; set; }
+        public int cellId { get; set; }
+        public int championId { get; set; }
+        public int championPickIntent { get; set; }
+        public string entitledFeatureType { get; set; }
+        public int selectedSkinId { get; set; }
+        public int spell1Id { get; set; }
+        public int spell2Id { get; set; }
+        public int summonerId { get; set; }
+        public int team { get; set; }
     }
 }

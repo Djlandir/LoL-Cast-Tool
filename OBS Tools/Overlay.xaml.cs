@@ -7,17 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using LCUSharp;
 using System.Net.Http;
-using Newtonsoft.Json;
 using RiotSharp.Endpoints.SummonerEndpoint;
+using LCUSharp.Websocket;
+using System.Windows.Threading;
+using System.Net;
+using Newtonsoft.Json;
+using RiotSharp.Endpoints.StaticDataEndpoint.Champion;
+using System.Windows.Media.Imaging;
 
 namespace OBS_Tools
 {
@@ -26,41 +24,150 @@ namespace OBS_Tools
     /// </summary>
     public partial class Overlay : Window
     {
-        public RiotApi Api;
+        public string Basepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"TextFiles\");
+        public string Imagepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"Images\");
+        public RiotApi Api = RiotApi.GetDevelopmentInstance("RGAPI-ae3ff4a1-a358-490b-a054-4971d19030a4", 20, 100);
         public LeagueClientApi LCUApi;
+        public List<string> SummonerNames = new List<string>();
+        private DispatcherTimer Timer = new DispatcherTimer();
+        public State State;
+        public CSAction Actions;
+        public string LatestVersion;
+        public ChampionListStatic Champions;
+
+        public event EventHandler<LeagueEvent> GameFlowChanged;
 
         public Overlay()
         {
             InitializeComponent();
 
-            Api = RiotApi.GetDevelopmentInstance("RGAPI-e8cbd757-7167-44cd-87cd-7fc989cfa5f5", 20, 100);
+            LatestVersion = File.ReadAllText(Basepath + "Latest_Version.txt");
+            var versions = Api.StaticData.Versions.GetAllAsync().Result;
 
-            var summoner = Api.Summoner.GetSummonerBySummonerIdAsync(RiotSharp.Misc.Region.Euw, "142943159").Result;
+            if (versions[0] != LatestVersion)
+                File.WriteAllText(Basepath + "Latest_Version.txt", versions[0]);
 
-            ConnecttoClient();
+            //GetChampions();
+
+            Timer.Interval = TimeSpan.FromSeconds(1);
+            Timer.Tick += TimerTick;
+
+            Status.Content = "Connected";
+
+            Timer.Start();
         }
 
-        public void UpdatePlayers()
+        private void TimerTick(object sender, EventArgs e)
         {
-            var summoner = Api.Summoner.GetSummonerByNameAsync(RiotSharp.Misc.Region.Euw, "DVN Djlandir").Result;
-            var summonerId = summoner.Id;
+            if (State == State.ChampSelect)
+            {
+                GetChampSelectData();
+            }
 
-            var n = Api.Spectator.GetCurrentGameAsync(RiotSharp.Misc.Region.Euw, summonerId).Result;
-            var p = n.Participants;
+            if (State == State.ChampSelect && SummonerNames.Count == 0)
+            {
+                GetSummonerNames();
+            }
+                
 
-            
+            if (State == State.ChampSelect && SummonerNames.Count > 0)
+            {
+                SetSummonerNames();
+            } 
+
+            if (State != State.ChampSelect && SummonerNames.Count > 0)
+                SummonerNames = new List<string>();
+
+            EventExampleAsync().ConfigureAwait(true);
         }
 
-        private void RefreshSummonners_Click(object sender, RoutedEventArgs e)
+        public void GetChampions()
         {
-            UpdatePlayers();
+            Champions = Api.StaticData.Champions.GetAllAsync(LatestVersion).Result;
+
+            foreach (var champion in Champions.Champions)
+            {
+#warning TODO
+                //object pickImage, banImage;
+
+                //string imagePick = champion.Value.Image.Full;
+                //string imageBan = champion.Value.Name + "_0.jpg";
+
+                //WebRequest wrPick = WebRequest.Create($"http://ddragon.leagueoflegends.com/cdn/{LatestVersion}/img/champion/{imagePick}");
+                //WebRequest wrBan = WebRequest.Create($"http://ddragon.leagueoflegends.com/cdn/img/champion/loading/{imageBan}");
+
+                //WebResponse resPick = wrPick.GetResponse();
+                //WebResponse resBan = wrBan.GetResponse();
+
+                //using (StreamReader sr = new StreamReader(resPick.GetResponseStream()))
+                //{
+                //    string json = sr.ReadToEnd();
+                //    pickImage = JsonConvert.DeserializeObject(json);
+                //}
+
+                //using (StreamReader sr = new StreamReader(resBan.GetResponseStream()))
+                //{
+                //    string json = sr.ReadToEnd();
+                //    banImage = JsonConvert.DeserializeObject(json);
+                //}
+
+                //PickImages.Add(pickImage);
+                //BanImages.Add(banImage);
+            }
         }
 
-        public async void ConnecttoClient()
+        public async Task EventExampleAsync()
         {
             LCUApi = await LeagueClientApi.ConnectAsync();
 
-            //var body = new { profileIconId = 23 };
+            GameFlowChanged += OnGameFlowChanged;
+            LCUApi.EventHandler.Subscribe("/lol-gameflow/v1/gameflow-phase", GameFlowChanged);
+        }
+
+        private void OnGameFlowChanged(object sender, LeagueEvent e)
+        {
+            var result = e.Data.ToString();
+
+            if (result == "None")
+                State = State.MainMenu;
+            else if (result == "ChampSelect")
+                State = State.ChampSelect;
+            else if (result == "Lobby")
+                State = State.Lobby;
+            else if (result == "InProgress")
+                State = State.InProgress;
+
+            // Print new state and set work to complete.
+            this.Dispatcher.Invoke(() =>
+            {
+                Status.Content = $"Status update: Entered {State}.";
+            });
+        }
+
+        public async void GetChampSelectData()
+        {
+            var queryParameters = Enumerable.Empty<string>();
+            var json = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
+                                                                     queryParameters);
+
+            var jsonResult = JsonConvert.DeserializeObject<CSActions>(json);
+
+            if (jsonResult.actions.First().Last().championId != 0)
+            {
+                var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == jsonResult.actions.First().Last().championId);
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    Champion.Content = champion.Value.Name;
+
+                    Uri source = new Uri(Imagepath + $"ChampionIcons\\{champion.Value.Image.Full}");
+                    Icon.Source = new BitmapImage(source);
+                });
+            }
+        }
+
+        public async void GetSummonerNames()
+        {
             var queryParameters = Enumerable.Empty<string>();
             var json = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
                                                                      queryParameters);
@@ -69,31 +176,53 @@ namespace OBS_Tools
 
             if (jsonResults != null)
             {
-                List<Summoner> p = new List<Summoner>();
-
-                jsonResults.myTeam.ForEach(mt =>
+                jsonResults.myTeam.ForEach(async mt =>
                 {
-                    string summnonerId = mt.summonerId.ToString();
-                    p.Add(Api.Summoner.GetSummonerBySummonerIdAsync(RiotSharp.Misc.Region.Euw, summnonerId).Result);
+                    var jsonSummonerResponse = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, $"lol-summoner/v1/summoners/{mt.summonerId}", queryParameters);
+                    SummonerName summonerName = JsonConvert.DeserializeObject<SummonerName>(jsonSummonerResponse);
+                    SummonerNames.Add(summonerName.displayName);
                 });
 
-                jsonResults.theirTeam.ForEach(tt =>
+                jsonResults.theirTeam.ForEach(async tt =>
                 {
-                    string summnonerId = tt.summonerId.ToString();
-                    p.Add(Api.Summoner.GetSummonerBySummonerIdAsync(RiotSharp.Misc.Region.Euw, summnonerId).Result);
+                    var jsonSummonerResponse = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, $"lol-summoner/v1/summoners/{tt.summonerId}", queryParameters);
+                    SummonerName summonerName = JsonConvert.DeserializeObject<SummonerName>(jsonSummonerResponse);
+                    SummonerNames.Add(summonerName.displayName);
                 });
-
-                SummonerName1.Text = p[0].Name;
-                SummonerName2.Text = p[1].Name;
-                SummonerName3.Text = p[2].Name;
-                SummonerName4.Text = p[3].Name;
-                SummonerName5.Text = p[4].Name;
-                SummonerName6.Text = p[5].Name;
-                SummonerName7.Text = p[6].Name;
-                SummonerName8.Text = p[7].Name;
-                SummonerName9.Text = p[8].Name;
-                SummonerName10.Text = p[9].Name;
             }
+        }
+
+        public async void SetSummonerNames()
+        {
+            await Task.Run(() =>
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    for (int i = 0; i < SummonerNames.Count; i++)
+                    {
+                        if (i == 0)
+                            SummonerName1.Text = SummonerNames[i];
+                        else if (i == 1)
+                            SummonerName2.Text = SummonerNames[i];
+                        else if (i == 2)
+                            SummonerName3.Text = SummonerNames[i];
+                        else if (i == 3)
+                            SummonerName4.Text = SummonerNames[i];
+                        else if (i == 4)
+                            SummonerName5.Text = SummonerNames[i];
+                        else if (i == 5)
+                            SummonerName6.Text = SummonerNames[i];
+                        else if (i == 6)
+                            SummonerName7.Text = SummonerNames[i];
+                        else if (i == 7)
+                            SummonerName8.Text = SummonerNames[i];
+                        else if (i == 8)
+                            SummonerName9.Text = SummonerNames[i];
+                        else if (i == 9)
+                            SummonerName10.Text = SummonerNames[i];
+                    }
+                });                
+            });
         }
     }
 }

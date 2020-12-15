@@ -6,7 +6,7 @@ namespace OBS_Tools
 {
     public class CSPlayers
     {
-        public List<Players> myTeam;
-        public List<Players> theirTeam;
+        public List<Players> myTeam { get; set; }
+        public List<Players> theirTeam { get; set; }
     }
 }

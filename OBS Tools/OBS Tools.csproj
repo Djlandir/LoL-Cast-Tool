@@ -37,6 +37,9 @@
     <None Update="TextFiles\Blue_Team.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TextFiles\Latest_Version.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TextFiles\Red_Score.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -58,10 +61,12 @@
     <Folder Include="Images\AllImages\" />
     <Folder Include="Images\ActiveImageBlueSide\" />
     <Folder Include="Images\ActiveImageRedSide\" />
+    <Folder Include="Images\ChampionIcons\" />
+    <Folder Include="Images\ChampionSplash\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lcu-sharp-master\LCUSharp\LCUSharp.csproj" />
+    <ProjectReference Include="..\..\lcu-sharp\LCUSharp\LCUSharp.csproj" />
   </ItemGroup>
 
 </Project>
