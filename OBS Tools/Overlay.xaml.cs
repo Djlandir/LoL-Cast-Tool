@@ -34,6 +34,7 @@ namespace OBS_Tools
         public CSAction Actions;
         public string LatestVersion;
         public ChampionListStatic Champions;
+        public bool GoldGraphOpened = false;
 
         public event EventHandler<LeagueEvent> GameFlowChanged;
 
@@ -74,6 +75,17 @@ namespace OBS_Tools
             {
                 SetSummonerNames();
             }
+
+            if (State == State.InProgress && GoldGraphOpened == false)
+            {
+                GoldGraph goldGraph = new GoldGraph();
+                goldGraph.Show();
+
+                GoldGraphOpened = true;
+            }
+
+            if (State != State.InProgress && GoldGraphOpened == true)
+                GoldGraphOpened = false;
 
             EventExampleAsync().ConfigureAwait(true);
         }

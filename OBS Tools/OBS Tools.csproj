@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="IronOcr" Version="2020.12.2" />
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="RiotSharp" Version="4.0.0" />
   </ItemGroup>
@@ -64,10 +66,17 @@
     <Folder Include="Images\ActiveImageRedSide\" />
     <Folder Include="Images\ChampionIcons\" />
     <Folder Include="Images\ChampionSplash\" />
+    <Folder Include="Images\TeamGold\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lcu-sharp\LCUSharp\LCUSharp.csproj" />
+    <ProjectReference Include="..\..\lcu-sharp-master\LCUSharp\LCUSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="GoldGraph.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>
