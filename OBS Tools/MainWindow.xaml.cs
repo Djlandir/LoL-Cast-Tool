@@ -1,4 +1,5 @@
-﻿using LCUSharp;
+﻿using IronOcr;
+using LCUSharp;
 using OBS_Tools.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -204,8 +205,49 @@ namespace OBS_Tools
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Overlay overlay = new Overlay();
-            overlay.Show();
+            var ocr = new IronTesseract();
+            var ocr2 = new IronTesseract();
+
+            using (var input = new OcrInput())
+            {
+                var content = new System.Drawing.Rectangle() { X = 750, Y = 10, Height = 45, Width = 80 };
+                var content2 = new System.Drawing.Rectangle() { X = 1130, Y = 10, Height = 45, Width = 75 };
+
+                input.DeNoise();
+                input.AddImage(@"C:\Users\JanPhilippThies\Desktop\maxresdefault.jpg", content);
+                string result = ocr.Read(input).Text;
+
+
+                int index = 0;
+                double gold = 0;
+                char[] tmpGoldValue = result.ToCharArray();
+                char[] goldValue = new char[5];
+
+                foreach (char c in tmpGoldValue)
+                {
+                    if (c != ' ')
+                    {
+                        goldValue[index] = c;
+                        index++;
+                    }
+                }
+
+                if (double.TryParse(goldValue[0].ToString() + goldValue[1].ToString(), out double resultV))
+                {
+                    gold += resultV;
+                }
+
+                if (double.TryParse(goldValue[3].ToString(), out double resultV2))
+                {
+                    gold += resultV2 / 10;
+                }
+
+                Gold.Content = gold;
+            }
+
+
+            //Overlay overlay = new Overlay();
+            //overlay.Show();
         }
     }
 }

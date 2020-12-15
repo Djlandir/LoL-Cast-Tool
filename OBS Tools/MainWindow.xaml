@@ -212,6 +212,24 @@
                 Click="ChangeImageRed"
                 Content="Button" />
         </Grid>
-        <Button Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="25,254,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button
+            Grid.Column="1"
+            Margin="25,254,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Click="Button_Click"
+            Content="Button" />
+        <Label
+            Name="Gold"
+            Grid.Column="1"
+            Margin="250,294,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" />
+        <Label
+            Name="Gold2"
+            Grid.Column="1"
+            Margin="250,294,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" />
     </Grid>
 </Window>
