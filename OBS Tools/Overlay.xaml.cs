@@ -47,9 +47,9 @@ namespace OBS_Tools
             if (versions[0] != LatestVersion)
                 File.WriteAllText(Basepath + "Latest_Version.txt", versions[0]);
 
-            //GetChampions();
+            GetChampions();
 
-            Timer.Interval = TimeSpan.FromSeconds(1);
+            Timer.Interval = TimeSpan.FromMilliseconds(500);
             Timer.Tick += TimerTick;
 
             Status.Content = "Connected";
@@ -73,10 +73,7 @@ namespace OBS_Tools
             if (State == State.ChampSelect && SummonerNames.Count > 0)
             {
                 SetSummonerNames();
-            } 
-
-            if (State != State.ChampSelect && SummonerNames.Count > 0)
-                SummonerNames = new List<string>();
+            }
 
             EventExampleAsync().ConfigureAwait(true);
         }
@@ -152,9 +149,9 @@ namespace OBS_Tools
 
             var jsonResult = JsonConvert.DeserializeObject<CSActions>(json);
 
-            if (jsonResult.actions.First().Last().championId != 0)
+            if (jsonResult.actions.Last().First().championId != 0)
             {
-                var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == jsonResult.actions.First().Last().championId);
+                var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == jsonResult.actions.Last().First().championId);
 
                 this.Dispatcher.Invoke(() =>
                 {
@@ -168,6 +165,8 @@ namespace OBS_Tools
 
         public async void GetSummonerNames()
         {
+            SummonerNames = new List<string>();
+
             var queryParameters = Enumerable.Empty<string>();
             var json = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
                                                                      queryParameters);
