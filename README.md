@@ -1,10 +1,10 @@
 This is the League of Legends Cast Tool (currently WIP)
 -
 Features
-	<br>-Flexible setup for stream overlays
-	<br>-customizable pick ban overlay
+<br>&nbsp;&nbsp;&nbsp;&nbsp;-Flexible setup for stream overlays
+<br>&nbsp;&nbsp;&nbsp;&nbsp;-customizable pick ban overlay
 
 
 Planned
-	<br>-advanced ingame statistics
-	<br>-advanced ingame overlay
+<br>&nbsp;&nbsp;&nbsp;&nbsp;-advanced ingame statistics
+<br>&nbsp;&nbsp;&nbsp;&nbsp;-advanced ingame overlay
