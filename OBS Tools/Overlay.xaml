@@ -103,7 +103,7 @@
             VerticalAlignment="Top"
             Content="Label" />
         <Image
-            Name="Icon"
+            Name="ChampIcon"
             Width="100"
             Height="100"
             Margin="270,254,0,0"

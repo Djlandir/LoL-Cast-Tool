@@ -141,11 +141,11 @@ namespace OBS_Tools
             });
         }
 
-        public async void GetChampSelectData()
+        public void GetChampSelectData()
         {
             var queryParameters = Enumerable.Empty<string>();
-            var json = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
-                                                                     queryParameters);
+            var json = LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
+                                                                     queryParameters).Result;
 
             var jsonResult = JsonConvert.DeserializeObject<CSActions>(json);
 
@@ -158,33 +158,33 @@ namespace OBS_Tools
                     Champion.Content = champion.Value.Name;
 
                     Uri source = new Uri(Imagepath + $"ChampionIcons\\{champion.Value.Image.Full}");
-                    Icon.Source = new BitmapImage(source);
+                    ChampIcon.Source = new BitmapImage(source);
                 });
             }
         }
 
-        public async void GetSummonerNames()
+        public void GetSummonerNames()
         {
             SummonerNames = new List<string>();
 
             var queryParameters = Enumerable.Empty<string>();
-            var json = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
-                                                                     queryParameters);
+            var json = LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-champ-select/v1/session",
+                                                                     queryParameters).Result;
 
             var jsonResults = JsonConvert.DeserializeObject<CSPlayers>(json);
 
             if (jsonResults != null)
             {
-                jsonResults.myTeam.ForEach(async mt =>
+                jsonResults.myTeam.ForEach(mt =>
                 {
-                    var jsonSummonerResponse = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, $"lol-summoner/v1/summoners/{mt.summonerId}", queryParameters);
+                    var jsonSummonerResponse = LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, $"lol-summoner/v1/summoners/{mt.summonerId}", queryParameters).Result;
                     SummonerName summonerName = JsonConvert.DeserializeObject<SummonerName>(jsonSummonerResponse);
                     SummonerNames.Add(summonerName.displayName);
                 });
 
-                jsonResults.theirTeam.ForEach(async tt =>
+                jsonResults.theirTeam.ForEach(tt =>
                 {
-                    var jsonSummonerResponse = await LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, $"lol-summoner/v1/summoners/{tt.summonerId}", queryParameters);
+                    var jsonSummonerResponse = LCUApi.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, $"lol-summoner/v1/summoners/{tt.summonerId}", queryParameters).Result;
                     SummonerName summonerName = JsonConvert.DeserializeObject<SummonerName>(jsonSummonerResponse);
                     SummonerNames.Add(summonerName.displayName);
                 });
