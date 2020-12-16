@@ -205,8 +205,11 @@ namespace OBS_Tools
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Overlay overlay = new Overlay();
-            overlay.Show();
+            //Overlay overlay = new Overlay();
+            //overlay.Show();
+
+            GoldGraph goldGraph = new GoldGraph();
+            goldGraph.Show();
         }
     }
 }

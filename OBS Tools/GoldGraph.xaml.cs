@@ -19,7 +19,6 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using IronOcr;
 using System.Runtime.InteropServices;
-using LiveCharts.Wpf;
 using LiveCharts;
 
 namespace OBS_Tools
@@ -43,7 +42,8 @@ namespace OBS_Tools
         public double GoldBlue;
         public double GoldRed;
 
-        public SeriesCollection SeriesCollection { get; set; }
+        public ChartValues<double> Values { get; set; }
+        public string[] Labels { get; set; }
 
         public GoldGraph()
         {
@@ -52,17 +52,14 @@ namespace OBS_Tools
             Timer.Interval = TimeSpan.FromMinutes(2);
             Timer.Tick += TimerTick;
 
-            SeriesCollection = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Title = "Gold Diff",
-                    Values = new ChartValues<double> { }
-                }
-            };
+            Values = new ChartValues<double> { 0, 0.5, 2, 0.8, 4, 3.6, 1, -2, 2, 1.4, -2.3, -4, -6, -7.5, -10.8 };
 
-            Timer.Start();
-            TimerTick(null, null);
+            Minutes.Labels = new[] { "0", "2", "4", "6", "8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50" };
+
+            DataContext = this;
+
+            //Timer.Start();
+            //TimerTick(null, null);
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -72,7 +69,7 @@ namespace OBS_Tools
             ReadScreen("GoldBlueTeam.png");
             ReadScreen("GoldRedTeam.png");
 
-            SeriesCollection[0].Values.Add(GoldBlue - GoldRed);
+            Values.Add(GoldBlue - GoldRed);
         }
 
         public void CaptureScreen(string fileName, int x, int y)

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OBS Tools", "OBS Tools\OBS Tools.csproj", "{D4F8128F-6717-4A80-8653-5261128C77C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCUSharp", "..\lcu-sharp-master\LCUSharp\LCUSharp.csproj", "{A3F5BDCE-FA55-4495-8F85-E1CA6E510A9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCUSharp", "..\lcu-sharp-master\LCUSharp\LCUSharp.csproj", "{E01A08CD-391F-464B-A422-723FA7F90C0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{D4F8128F-6717-4A80-8653-5261128C77C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4F8128F-6717-4A80-8653-5261128C77C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4F8128F-6717-4A80-8653-5261128C77C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3F5BDCE-FA55-4495-8F85-E1CA6E510A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3F5BDCE-FA55-4495-8F85-E1CA6E510A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3F5BDCE-FA55-4495-8F85-E1CA6E510A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3F5BDCE-FA55-4495-8F85-E1CA6E510A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E01A08CD-391F-464B-A422-723FA7F90C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E01A08CD-391F-464B-A422-723FA7F90C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E01A08CD-391F-464B-A422-723FA7F90C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E01A08CD-391F-464B-A422-723FA7F90C0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
