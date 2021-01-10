@@ -49,8 +49,8 @@ namespace OBS_Tools
 
             LatestVersionString = LatestVersionService.GetLatestVersion();
 
-            BlueTeam.Content = File.ReadAllText(Basepath + "Blue_Team.txt");
-            RedTeam.Content = File.ReadAllText(Basepath + "Red_Team.txt");
+            BlueTeam.Content = File.ReadAllText(Basepath + "Blue_Team.txt") + "    " + File.ReadAllText(Basepath + "Blue_Score.txt");
+            RedTeam.Content = File.ReadAllText(Basepath + "Red_Team.txt") + "    " + File.ReadAllText(Basepath + "Red_Score.txt");
 
             GetChampions();
 

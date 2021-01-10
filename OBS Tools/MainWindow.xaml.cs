@@ -42,6 +42,8 @@ namespace OBS_Tools
             RedTeam.Text = File.ReadAllText(Basepath + "Red_Team.txt");
             RedScore.Text = File.ReadAllText(Basepath + "Red_Score.txt");
             Tournament.Text = File.ReadAllText(Basepath + "Tournament.txt");
+            BlueScoreIG.Text = File.ReadAllText(Basepath + "Blue_Score_IG.txt");
+            RedScoreIG.Text = File.ReadAllText(Basepath + "Red_Score_IG.txt");
 
             Teams = GenerateTeams();
 
