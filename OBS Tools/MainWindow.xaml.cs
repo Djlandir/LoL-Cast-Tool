@@ -1,6 +1,7 @@
 ﻿using IronOcr;
 using LCUSharp;
 using OBS_Tools.Interfaces;
+using RiotSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,9 @@ namespace OBS_Tools
     {
         public string Basepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"TextFiles\");
         public string Imagepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"Images\");
+        public RiotApi Api = RiotApi.GetDevelopmentInstance(GlobalValues.RiotAPIKey, 20, 100);
         public List<Team> Teams;
+        public LatestVersionService LatestVersionService = new LatestVersionService();
 
         public MainWindow()
         {
@@ -47,6 +50,8 @@ namespace OBS_Tools
                 TeamsBlue.Items.Add(t.Name);
                 TeamsRed.Items.Add(t.Name);
             });
+
+            string latestVersion = LatestVersionService.GetLatestVersion();
         }
 
         private void BlueShort_TextChanged(object sender, TextChangedEventArgs e)
@@ -205,11 +210,11 @@ namespace OBS_Tools
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Overlay overlay = new Overlay();
-            //overlay.Show();
+            Overlay overlay = new Overlay();
+            overlay.Show();
 
-            GoldGraph goldGraph = new GoldGraph();
-            goldGraph.Show();
+            //GoldGraph goldGraph = new GoldGraph();
+            //goldGraph.Show();
         }
     }
 }

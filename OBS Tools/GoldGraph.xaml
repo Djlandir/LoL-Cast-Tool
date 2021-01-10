@@ -9,7 +9,7 @@
     Title="Overlay"
     Width="1000"
     Height="300"
-    Background="#0D1D1C"
+    Background="Black"
     mc:Ignorable="d">
     <Grid>
         <lvc:CartesianChart
@@ -23,19 +23,13 @@
                     AreaLimit="0"
                     LineSmoothness="0"
                     PointGeometrySize="0"
-                    Stroke="LightSkyBlue"
+                    Stroke="Goldenrod"
+                    Fill="gold"
                     StrokeThickness="3"
-                    Values="{Binding Values}" />
-                <lvc:LineSeries
-                    AreaLimit="0"
-                    LineSmoothness="0"
-                    PointGeometrySize="0"
-                    Stroke="IndianRed"
-                    StrokeThickness="3"
-                    Values="{Binding Values}" />
+                    Values="{Binding Values}"/>
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Name="GoldDifference">
+                <lvc:Axis Name="GoldDifference" Labels="0">
                     <lvc:Axis.Separator>
                         <lvc:Separator StrokeThickness="0" />
                     </lvc:Axis.Separator>
@@ -45,13 +39,21 @@
                             StrokeThickness="1"
                             Value="0" />
                         <lvc:AxisSection
-                            Fill="Transparent"
                             SectionWidth="12"
-                            Value="-12" />
+                            Value="-12"
+                            Label="DVN">
+                            <lvc:AxisSection.Fill>
+                                <SolidColorBrush Color="IndianRed" Opacity=".4"/>
+                            </lvc:AxisSection.Fill>
+                        </lvc:AxisSection>
                         <lvc:AxisSection
-                            Fill="Transparent"
                             SectionWidth="12"
-                            Value="0" />
+                            Value="0"
+                            Label="TES">
+                            <lvc:AxisSection.Fill>
+                                <SolidColorBrush Color="LightSkyBlue" Opacity=".4"/>
+                            </lvc:AxisSection.Fill>
+                        </lvc:AxisSection>
                     </lvc:Axis.Sections>
                 </lvc:Axis>
             </lvc:CartesianChart.AxisY>

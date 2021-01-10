@@ -26,27 +26,31 @@ namespace OBS_Tools
     {
         public string Basepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"TextFiles\");
         public string Imagepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"Images\");
-        public RiotApi Api = RiotApi.GetDevelopmentInstance("RGAPI-ae3ff4a1-a358-490b-a054-4971d19030a4", 20, 100);
+        public RiotApi Api = RiotApi.GetDevelopmentInstance(GlobalValues.RiotAPIKey, 20, 100);
         public LeagueClientApi LCUApi;
         public List<string> SummonerNames = new List<string>();
         private DispatcherTimer Timer = new DispatcherTimer();
         public State State;
         public CSAction Actions;
-        public string LatestVersion;
+        public string LatestVersionString;
         public ChampionListStatic Champions;
         public bool GoldGraphOpened = false;
+        public LatestVersionService LatestVersionService = new LatestVersionService();
+        public List<System.Windows.Controls.Image> PickPlaceholders = new List<System.Windows.Controls.Image>();
+        public List<System.Windows.Controls.Image> BanPlaceholders = new List<System.Windows.Controls.Image>();
 
         public event EventHandler<LeagueEvent> GameFlowChanged;
 
         public Overlay()
         {
             InitializeComponent();
+            
+            AddPlaceholders();
 
-            LatestVersion = File.ReadAllText(Basepath + "Latest_Version.txt");
-            var versions = Api.StaticData.Versions.GetAllAsync().Result;
+            LatestVersionString = LatestVersionService.GetLatestVersion();
 
-            if (versions[0] != LatestVersion)
-                File.WriteAllText(Basepath + "Latest_Version.txt", versions[0]);
+            BlueTeam.Content = File.ReadAllText(Basepath + "Blue_Team.txt");
+            RedTeam.Content = File.ReadAllText(Basepath + "Red_Team.txt");
 
             GetChampions();
 
@@ -69,8 +73,7 @@ namespace OBS_Tools
             {
                 GetSummonerNames();
             }
-                
-
+            
             if (State == State.ChampSelect && SummonerNames.Count > 0)
             {
                 SetSummonerNames();
@@ -92,37 +95,7 @@ namespace OBS_Tools
 
         public void GetChampions()
         {
-            Champions = Api.StaticData.Champions.GetAllAsync(LatestVersion).Result;
-
-            foreach (var champion in Champions.Champions)
-            {
-#warning TODO
-                //object pickImage, banImage;
-
-                //string imagePick = champion.Value.Image.Full;
-                //string imageBan = champion.Value.Name + "_0.jpg";
-
-                //WebRequest wrPick = WebRequest.Create($"http://ddragon.leagueoflegends.com/cdn/{LatestVersion}/img/champion/{imagePick}");
-                //WebRequest wrBan = WebRequest.Create($"http://ddragon.leagueoflegends.com/cdn/img/champion/loading/{imageBan}");
-
-                //WebResponse resPick = wrPick.GetResponse();
-                //WebResponse resBan = wrBan.GetResponse();
-
-                //using (StreamReader sr = new StreamReader(resPick.GetResponseStream()))
-                //{
-                //    string json = sr.ReadToEnd();
-                //    pickImage = JsonConvert.DeserializeObject(json);
-                //}
-
-                //using (StreamReader sr = new StreamReader(resBan.GetResponseStream()))
-                //{
-                //    string json = sr.ReadToEnd();
-                //    banImage = JsonConvert.DeserializeObject(json);
-                //}
-
-                //PickImages.Add(pickImage);
-                //BanImages.Add(banImage);
-            }
+            Champions = Api.StaticData.Champions.GetAllAsync(LatestVersionString).Result;
         }
 
         public async Task EventExampleAsync()
@@ -161,16 +134,24 @@ namespace OBS_Tools
 
             var jsonResult = JsonConvert.DeserializeObject<CSActions>(json);
 
-            if (jsonResult.actions.Last().First().championId != 0)
+            var lastAction = jsonResult.actions.Last().First();
+
+            if (lastAction.championId != 0)
             {
-                var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == jsonResult.actions.Last().First().championId);
+                var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == lastAction.championId);
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    Champion.Content = champion.Value.Name;
-
-                    Uri source = new Uri(Imagepath + $"ChampionIcons\\{champion.Value.Image.Full}");
-                    ChampIcon.Source = new BitmapImage(source);
+                    if (lastAction.type == "pick")
+                    {
+                        Uri source = new Uri(Imagepath + $"ChampionSplash\\{champion.Value.Key}_0.jpg");
+                        PickPlaceholders[lastAction.pickTurn -1].Source = new BitmapImage(source);
+                    }
+                    else if (lastAction.type == "ban")
+                    {
+                        Uri source = new Uri(Imagepath + $"ChampionIcons\\{champion.Value.Key}.png");
+                        BanPlaceholders[lastAction.pickTurn - 1].Source = new BitmapImage(source);
+                    }
                 });
             }
         }
@@ -212,28 +193,53 @@ namespace OBS_Tools
                     for (int i = 0; i < SummonerNames.Count; i++)
                     {
                         if (i == 0)
-                            SummonerName1.Text = SummonerNames[i];
+                            SummonerName1.Content = SummonerNames[i];
                         else if (i == 1)
-                            SummonerName2.Text = SummonerNames[i];
+                            SummonerName2.Content = SummonerNames[i];
                         else if (i == 2)
-                            SummonerName3.Text = SummonerNames[i];
+                            SummonerName3.Content = SummonerNames[i];
                         else if (i == 3)
-                            SummonerName4.Text = SummonerNames[i];
+                            SummonerName4.Content = SummonerNames[i];
                         else if (i == 4)
-                            SummonerName5.Text = SummonerNames[i];
+                            SummonerName5.Content = SummonerNames[i];
                         else if (i == 5)
-                            SummonerName6.Text = SummonerNames[i];
+                            SummonerName6.Content = SummonerNames[i];
                         else if (i == 6)
-                            SummonerName7.Text = SummonerNames[i];
+                            SummonerName7.Content = SummonerNames[i];
                         else if (i == 7)
-                            SummonerName8.Text = SummonerNames[i];
+                            SummonerName8.Content = SummonerNames[i];
                         else if (i == 8)
-                            SummonerName9.Text = SummonerNames[i];
+                            SummonerName9.Content = SummonerNames[i];
                         else if (i == 9)
-                            SummonerName10.Text = SummonerNames[i];
+                            SummonerName10.Content = SummonerNames[i];
                     }
                 });                
             });
+        }
+
+        private void AddPlaceholders()
+        {
+            PickPlaceholders.Add(PickTurn1);
+            PickPlaceholders.Add(PickTurn2);
+            PickPlaceholders.Add(PickTurn3);
+            PickPlaceholders.Add(PickTurn4);
+            PickPlaceholders.Add(PickTurn5);
+            PickPlaceholders.Add(PickTurn6);
+            PickPlaceholders.Add(PickTurn7);
+            PickPlaceholders.Add(PickTurn8);
+            PickPlaceholders.Add(PickTurn9);
+            PickPlaceholders.Add(PickTurn10);
+
+            BanPlaceholders.Add(BanTurn1);
+            BanPlaceholders.Add(BanTurn2);
+            BanPlaceholders.Add(BanTurn3);
+            BanPlaceholders.Add(BanTurn4);
+            BanPlaceholders.Add(BanTurn5);
+            BanPlaceholders.Add(BanTurn6);
+            BanPlaceholders.Add(BanTurn7);
+            BanPlaceholders.Add(BanTurn8);
+            BanPlaceholders.Add(BanTurn9);
+            BanPlaceholders.Add(BanTurn10);
         }
     }
 }

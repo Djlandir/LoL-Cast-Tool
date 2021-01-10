@@ -30,7 +30,7 @@ namespace OBS_Tools
     {
         public string Basepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"TextFiles\");
         public string Imagepath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))), @"Images\");
-        public RiotApi Api = RiotApi.GetDevelopmentInstance("RGAPI-ae3ff4a1-a358-490b-a054-4971d19030a4", 20, 100);
+        public RiotApi Api = RiotApi.GetDevelopmentInstance(GlobalValues.RiotAPIKey, 20, 100);
         public LeagueClientApi LCUApi;
         public List<string> SummonerNames = new List<string>();
         private DispatcherTimer Timer = new DispatcherTimer();
@@ -53,6 +53,8 @@ namespace OBS_Tools
             Timer.Tick += TimerTick;
 
             Values = new ChartValues<double> { 0, 0.5, 2, 0.8, 4, 3.6, 1, -2, 2, 1.4, -2.3, -4, -6, -7.5, -10.8 };
+
+            GoldDifference.Labels = new[] { $"{Values.Min()}", "0", $"{Values.Max()}" };
 
             Minutes.Labels = new[] { "0", "2", "4", "6", "8", "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50" };
 
