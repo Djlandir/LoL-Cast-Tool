@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\BG.png" />
     <None Remove="Images\PBPlaceholders\BanPlaceholder.png" />
     <None Remove="Images\PBPlaceholders\BotPlaceholder.png" />
     <None Remove="Images\PBPlaceholders\JunglePlaceholder.png" />
@@ -1004,6 +1005,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\BG.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\PBPlaceholders\BanPlaceholder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

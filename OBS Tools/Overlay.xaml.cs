@@ -16,6 +16,7 @@ using System.Net;
 using Newtonsoft.Json;
 using RiotSharp.Endpoints.StaticDataEndpoint.Champion;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
 
 namespace OBS_Tools
 {
@@ -30,6 +31,7 @@ namespace OBS_Tools
         public LeagueClientApi LCUApi;
         public List<string> SummonerNames = new List<string>();
         private DispatcherTimer Timer = new DispatcherTimer();
+        private DispatcherTimer TimerClientStateCheck = new DispatcherTimer();
         public State State;
         public CSAction Actions;
         public string LatestVersionString;
@@ -57,9 +59,17 @@ namespace OBS_Tools
             Timer.Interval = TimeSpan.FromMilliseconds(500);
             Timer.Tick += TimerTick;
 
+            TimerClientStateCheck.Interval = TimeSpan.FromMilliseconds(500);
+            TimerClientStateCheck.Tick += TimerTickClientStateCheck;
+
             Status.Content = "Connected";
 
-            Timer.Start();
+            TimerClientStateCheck.Start();
+        }
+
+        private void TimerTickClientStateCheck(object sender, EventArgs e)
+        {
+            EventExampleAsync().ConfigureAwait(true);
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -89,8 +99,6 @@ namespace OBS_Tools
 
             if (State != State.InProgress && GoldGraphOpened == true)
                 GoldGraphOpened = false;
-
-            EventExampleAsync().ConfigureAwait(true);
         }
 
         public void GetChampions()
@@ -123,6 +131,11 @@ namespace OBS_Tools
             this.Dispatcher.Invoke(() =>
             {
                 Status.Content = $"Status update: Entered {State}.";
+
+                if (State == State.ChampSelect && !Timer.IsEnabled)
+                    Timer.Start();
+                else if (State != State.ChampSelect && Timer.IsEnabled)
+                    Timer.Stop();
             });
         }
 
@@ -134,25 +147,38 @@ namespace OBS_Tools
 
             var jsonResult = JsonConvert.DeserializeObject<CSActions>(json);
 
-            var lastAction = jsonResult.actions.Last().First();
-
-            if (lastAction.championId != 0)
+            var parsedJson = new List<CSAction>();
+            this.Dispatcher.Invoke(() =>
             {
-                var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == lastAction.championId);
-
-                this.Dispatcher.Invoke(() =>
+                foreach (var actions in jsonResult.actions)
                 {
-                    if (lastAction.type == "pick")
+                    parsedJson.Add(actions.First());
+                }
+            });
+            
+
+            if (parsedJson.Count > 1)
+            {
+                var lastAction = parsedJson.Where(x => x.championId != 0).Last();
+
+                if (lastAction.championId != 0)
+                {
+                    var champion = Champions.Champions.SingleOrDefault(c => c.Value.Id == lastAction.championId);
+
+                    this.Dispatcher.Invoke(() =>
                     {
-                        Uri source = new Uri(Imagepath + $"ChampionSplash\\{champion.Value.Key}_0.jpg");
-                        PickPlaceholders[lastAction.pickTurn -1].Source = new BitmapImage(source);
-                    }
-                    else if (lastAction.type == "ban")
-                    {
-                        Uri source = new Uri(Imagepath + $"ChampionIcons\\{champion.Value.Key}.png");
-                        BanPlaceholders[lastAction.pickTurn - 1].Source = new BitmapImage(source);
-                    }
-                });
+                        if (lastAction.type == "pick")
+                        {
+                            Uri source = new Uri(Imagepath + $"ChampionSplash\\{champion.Value.Key}_0.jpg");
+                            PickPlaceholders[lastAction.actorCellId].Source = new BitmapImage(source);
+                        }
+                        else if (lastAction.type == "ban")
+                        {
+                            Uri source = new Uri(Imagepath + $"ChampionIcons\\{champion.Value.Key}.png");
+                            BanPlaceholders[lastAction.pickTurn - 1].Source = new BitmapImage(source);
+                        }
+                    });
+                }
             }
         }
 
@@ -240,6 +266,12 @@ namespace OBS_Tools
             BanPlaceholders.Add(BanTurn8);
             BanPlaceholders.Add(BanTurn9);
             BanPlaceholders.Add(BanTurn10);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            TimerClientStateCheck.Stop();
+            Timer.Stop();
         }
     }
 }
